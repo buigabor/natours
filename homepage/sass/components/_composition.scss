@@ -1,0 +1,92 @@
+.composition {
+
+    position: relative;
+
+    &__photo {
+        width: 55%;
+        box-shadow: 0 1.5rem 4rem rgba($color-black, 0.4);
+        border-radius: 4px;
+        position: absolute;
+        z-index: 10;
+        outline-offset: 2rem;
+
+        transition: all 0.2s;
+
+        @include respond(phone) {
+            float: left;
+            position: relative;
+            width: 33.333333%;
+            box-shadow: 0 1.5rem 3rem rgba($color-black, .2);
+        }
+
+        @include respond(tab-port) {
+            float: left;
+            position: relative;
+            width: 33.333333%;
+            box-shadow: 0 1.5rem 3rem rgba($color-black, .2);
+        }
+
+        &--p1 {
+            top: -2rem;
+            left: 0;
+
+            @include respond(phone) {
+                top: 1.5rem;
+                transform: scale(1.2);
+            }
+
+            @include respond(tab-port) {
+                top: 1.5rem;
+                transform: scale(1.2);
+            }
+        }
+
+        &--p2 {
+            top: 2rem;
+            right: 0;
+
+            @include respond(phone) {
+                top: -1rem;
+                transform: scale(1.4);
+                z-index: 11;
+            }
+
+            @include respond(tab-port) {
+                top: -1rem;
+                transform: scale(1.4);
+                z-index: 11;
+            }
+        }
+
+        &--p3 {
+            top: 10rem;
+            left: 20%;
+
+            @include respond(phone) {
+                top: 1.5rem;
+                left: 0;
+                transform: scale(1.2);
+            }
+
+            @include respond(tab-port) {
+                top: 1.5rem;
+                left: 0;
+                transform: scale(1.2);
+            }
+        }
+
+        &:hover {
+            outline: 1.5rem solid $color-primary;
+            transform: scale(1.1) translateY(-1rem);
+            box-shadow: 0 2.5rem 4rem rgba($color-black, 0.5);
+            z-index: 11;
+
+        }
+    }
+
+    &:hover &__photo:not(:hover) {
+        transform: scale(0.95);
+    }
+
+
+}
