@@ -2,14 +2,43 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/userModel');
+const Review = require('../models/reviewModel');
 const catchAsyncErrors = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { sendEmail } = require('../utils/email');
 
+const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
 // eslint-disable-next-line arrow-body-style
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
+
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user.id);
+
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() -
+        timezoneOffset +
+        process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === 'production') {
+    cookieOptions.secure = true;
+  }
+
+  res.cookie('jwt', token, cookieOptions);
+  // Remove password from output
+  user.password = undefined;
+
+  res.status(statusCode).json({
+    status: 'succes',
+    token,
+    data: { user },
   });
 };
 
@@ -23,13 +52,7 @@ const signUp = catchAsyncErrors(async (req, res, next) => {
     role: req.body.role,
   });
 
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
-    status: 'succes',
-    token,
-    data: { user: newUser },
-  });
+  createSendToken(newUser, 201, res);
 });
 
 const login = catchAsyncErrors(async (req, res, next) => {
@@ -49,11 +72,7 @@ const login = catchAsyncErrors(async (req, res, next) => {
 
   // 3. If everything ok, send token to client
 
-  const token = signToken(user._id);
-  res.status(201).json({
-    status: 'succes',
-    token,
-  });
+  createSendToken(user, 201, res);
 });
 
 const protectRoute = catchAsyncErrors(async (req, res, next) => {
@@ -87,7 +106,6 @@ const protectRoute = catchAsyncErrors(async (req, res, next) => {
   }
 
   // 4. Check if user changed password after the token was issued
-
   if (user.changedPasswordAfter(decodedToken.iat)) {
     return next(
       new AppError('User recently changed password. Please login again', 401)
@@ -154,10 +172,10 @@ const resetPassword = catchAsyncErrors(async (req, res, next) => {
     .createHash('sha256')
     .update(req.params.token)
     .digest('hex');
-  const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
+
   const user = await User.findOne({
     passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() - timeOffset },
+    passwordResetExpires: { $gt: Date.now() - timezoneOffset },
   });
   // 2) If token has not expired, and there is user, set the new password
   if (!user) {
@@ -171,18 +189,48 @@ const resetPassword = catchAsyncErrors(async (req, res, next) => {
 
   // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
-  const token = signToken(user._id);
-  res.status(201).json({
-    status: 'succes',
-    token,
-  });
+  createSendToken(user, 200, res);
 });
+
+const updatePassword = catchAsyncErrors(async (req, res, next) => {
+  //1. Get user
+  const user = await User.findById(req.user.id).select('+password');
+  if (!user) {
+    return next(new AppError('No user found with the provided email', 404));
+  }
+  //2. Check if posted password correct
+  const match = await user.comparePasswords(
+    req.body.currentPassword,
+    user.password
+  );
+  if (!match) {
+    return next(new AppError('Your current password is wrong', 401));
+  }
+  //3. Update password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  //4. Log user in
+  createSendToken(user, 200, res);
+});
+
+const checkIfCurrentUser = async (req, res, next) => {
+  const review = await Review.findById(req.params.id);
+  if (!review) {
+    return next(new AppError('No review found with that ID', 404));
+  }
+  if (req.user.role !== 'admin' && review.user.id !== req.user.id)
+    return next(new AppError("You cannot update some else's review.", 403));
+  next();
+};
 
 module.exports = {
   signUp,
   login,
   protectRoute,
   restrictTo,
+  checkIfCurrentUser,
   forgotPassword,
   resetPassword,
+  updatePassword,
 };

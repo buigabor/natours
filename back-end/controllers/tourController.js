@@ -1,7 +1,13 @@
 const Tour = require('../models/tourModel');
-const APIFeatures = require('../utils/apiFeatures');
-const catchAsyncErrors = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const catchAsyncErrors = require('../utils/catchAsync');
+const {
+  deleteOne,
+  updateOne,
+  createOne,
+  getOne,
+  getAll,
+} = require('./handleFactory');
 
 const aliasTopTours = (req, res, next) => {
   req.query.limit = 5;
@@ -10,62 +16,11 @@ const aliasTopTours = (req, res, next) => {
   next();
 };
 
-const getAllTours = catchAsyncErrors(async (req, res, next) => {
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const tours = await features.query;
-
-  // Send Response
-
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    results: tours.length,
-    data: { tours },
-  });
-});
-
-const getTour = catchAsyncErrors(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
-  if (!tour) {
-    return next(new AppError('No tour found with that ID', 404));
-  }
-  res.status(200).json({ status: 'success', data: { tour } });
-});
-
-const createTour = catchAsyncErrors(async (req, res, next) => {
-  const newTour = await Tour.create(req.body);
-  res.status(201).json({ status: 'success', data: { tour: newTour } });
-});
-
-const updateTour = catchAsyncErrors(async (req, res, next) => {
-  const updatedTour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
-  if (!updatedTour) {
-    return next(new AppError('No tour found with that ID', 404));
-  }
-  res.status(200).json({
-    status: 'success',
-    data: { tour: updatedTour },
-  });
-});
-
-const deleteTour = catchAsyncErrors(async (req, res, next) => {
-  const deletedTour = await Tour.findByIdAndDelete(req.params.id);
-  if (!deletedTour) {
-    return next(new AppError('No tour found with that ID', 404));
-  }
-  res.status(200).json({
-    status: 'success',
-    data: { tour: deletedTour },
-  });
-});
+const getAllTours = getAll(Tour);
+const getTour = getOne(Tour, { path: 'reviews' });
+const createTour = createOne(Tour);
+const updateTour = updateOne(Tour);
+const deleteTour = deleteOne(Tour);
 
 // Aggregation Pipelines
 
@@ -126,6 +81,65 @@ const getMonthlyPlan = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+const getToursWithin = catchAsyncErrors(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+  if (!lat || !lng) {
+    return next(
+      new AppError(
+        'Please provide both latitude and longitude in the format of lat,lng',
+        400
+      )
+    );
+  }
+  const tours = await Tour.find({
+    startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
+
+  res
+    .status(200)
+    .json({ status: 'sucess', results: tours.length, data: { tours } });
+});
+
+const getDistances = catchAsyncErrors(async (req, res, next) => {
+  const { latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+
+  if (!lat || !lng) {
+    return next(
+      new AppError(
+        'Please provide both latitude and longitude in the format of lat,lng',
+        400
+      )
+    );
+  }
+
+  const distances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: { type: 'Point', coordinates: [parseInt(lng), parseInt(lat)] },
+        distanceField: 'distance',
+        distanceMultiplier: multiplier,
+      },
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1,
+      },
+    },
+  ]);
+
+  res
+    .status(200)
+    .json({ status: 'sucess', results: distances.length, data: { distances } });
+});
+
 module.exports = {
   getAllTours,
   getTour,
@@ -135,4 +149,6 @@ module.exports = {
   aliasTopTours,
   getTourStats,
   getMonthlyPlan,
+  getToursWithin,
+  getDistances,
 };
