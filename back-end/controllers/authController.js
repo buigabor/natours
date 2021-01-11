@@ -72,7 +72,7 @@ const login = catchAsyncErrors(async (req, res, next) => {
 
   // 3. If everything ok, send token to client
 
-  createSendToken(user, 201, res);
+  createSendToken(user, 200, res);
 });
 
 const protectRoute = catchAsyncErrors(async (req, res, next) => {
@@ -83,6 +83,8 @@ const protectRoute = catchAsyncErrors(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) {
