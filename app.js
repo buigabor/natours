@@ -8,6 +8,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const app = express();
 const AppError = require('./utils/appError');
@@ -24,7 +25,23 @@ app.set('views', path.join(__dirname, 'views'));
 // 1. GLOBAL MIDDLEWARES
 
 // Set security HTTP headers
-app.use(helmet());
+app.use(
+  cors({
+    origin: 'http://127.0.0.1:3000',
+    credentials: true,
+  })
+);
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'", 'https:', 'http:', 'data:', 'ws:'],
+      baseUri: ["'self'"],
+      fontSrc: ["'self'", 'https:', 'http:', 'data:'],
+      scriptSrc: ["'self'", 'https:', 'http:', 'blob:'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https:', 'http:'],
+    },
+  })
+);
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
@@ -41,6 +58,7 @@ app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
 // Data sanitazation against NOSQL query injection
@@ -69,7 +87,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.cookies);
   next();
 });
 

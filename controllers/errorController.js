@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 const AppError = require('../utils/appError');
 
 const handleJWTExpirationError = () =>
@@ -27,38 +28,64 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
-const sendErrorForDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    error: err,
-    message: err.message,
-    stack: err.stack,
-  });
+const sendErrorForDev = (err, req, res) => {
+  // API Errror
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(err.statusCode).json({
+      status: err.status,
+      error: err,
+      message: err.message,
+      stack: err.stack,
+    });
+  }
+  // Rendered Website Error
+  console.error(err);
+  res
+    .status(err.statusCode)
+    .render('error', { title: 'Something went wrong!', msg: err.message });
 };
 
-const sendErrorForProd = (err, res) => {
-  // Operational error
-  if (err.isOperationalError) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message,
-    });
-  } else {
-    // Programming error or other unknown error: don't leak error details
+const sendErrorForProd = (err, req, res) => {
+  // API Errror
+  if (req.originalUrl.startsWith('/api')) {
+    // A) Operational error
+    if (err.isOperationalError) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+      });
+    }
+    // B) Programming error or other unknown error: don't leak error details
     console.error(err);
-    res
+    return res
       .status(500)
       .json({ status: 'error', message: 'Something went wrong :(' });
   }
+
+  // Rendered Website Error
+  // A) Operational error
+  if (err.isOperationalError) {
+    return res
+      .status(err.statusCode)
+      .render('error', { title: 'Something went wrong!', msg: err.message });
+  }
+  // B) Programming error or other unknown error: don't leak error details
+  console.error(err);
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: 'Please try again later!',
+  });
 };
 
 const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
   if (process.env.NODE_ENV === 'development') {
-    sendErrorForDev(err, res);
+    sendErrorForDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
+    error.message = err.message;
+
     console.log(error);
     if (err.name === 'CastError') {
       error = handleCastErrorDB(error);
@@ -71,7 +98,7 @@ const globalErrorHandler = (err, req, res, next) => {
     } else if (err.name === 'TokenExpiredError') {
       error = handleJWTExpirationError();
     }
-    sendErrorForProd(error, res);
+    sendErrorForProd(error, req, res);
   }
 };
 

@@ -1,5 +1,7 @@
 const Tour = require('../models/tourModel');
+const User = require('../models/userModel');
 const catchAsyncErrors = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 const renderOverview = catchAsyncErrors(async (req, res, next) => {
   // 1. Get tour data from collection
@@ -17,6 +19,10 @@ const renderTour = catchAsyncErrors(async (req, res, next) => {
   });
   // 2. Build template
   // 3. Render template
+
+  if (!tour) {
+    return next(new AppError('There is no tour with that name', 404));
+  }
 
   res
     .status(200)
@@ -42,5 +48,31 @@ const renderLogin = catchAsyncErrors(async (req, res, next) => {
     )
     .render('login', { title: 'Log into your account' });
 });
+const renderAccount = (req, res) => {
+  res.status(200).render('account', { title: 'Your account' });
+};
+const updateUserData = catchAsyncErrors(async (req, res, next) => {
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      name: req.body.name,
+      email: req.body.email,
+    },
+    { new: true, runValidators: true }
+  );
 
-module.exports = { renderOverview, renderTour, renderBase, renderLogin };
+  res
+    .status(200)
+    .render('account', { title: 'Your account', user: updatedUser });
+});
+
+// Only for rendered pages, no errors!
+
+module.exports = {
+  renderOverview,
+  renderTour,
+  renderBase,
+  renderLogin,
+  renderAccount,
+  updateUserData,
+};
