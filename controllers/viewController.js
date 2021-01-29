@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
+const Booking = require('../models/bookingModel');
 const catchAsyncErrors = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -68,6 +69,17 @@ const updateUserData = catchAsyncErrors(async (req, res, next) => {
 
 // Only for rendered pages, no errors!
 
+const renderMyTours = catchAsyncErrors(async (req, res, next) => {
+  // Find all booking
+  const bookings = await Booking.find({ user: req.user.id });
+
+  // Find tours with the returned IDss
+  const tourIDs = bookings.map((el) => el.tour);
+  const tours = await Tour.find({ _id: { $in: tourIDs } });
+
+  res.status(200).render('overview', { title: 'My Tours', tours });
+});
+
 module.exports = {
   renderOverview,
   renderTour,
@@ -75,4 +87,5 @@ module.exports = {
   renderLogin,
   renderAccount,
   updateUserData,
+  renderMyTours,
 };

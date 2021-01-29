@@ -2,6 +2,7 @@
 import '@babel/polyfill';
 import { login, logout } from './login';
 import { displayMap } from './mapbox';
+import { bookTour } from './stripe';
 import { updateSettings } from './updateSettings';
 
 const mapBox = document.getElementById('map');
@@ -9,6 +10,7 @@ const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const updateForm = document.querySelector('.form-user-data');
 const updatePassForm = document.querySelector('.form-user-password');
+const bookButton = document.getElementById('book-tour');
 
 if (mapBox) {
   const locations = JSON.parse(
@@ -35,9 +37,12 @@ if (updateForm) {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const name = document.getElementById('name').value;
-    console.log(email);
-    console.log(name);
-    updateSettings({ name, email }, 'data');
+    const photo = document.getElementById('photo').files[0];
+    const form = new FormData();
+    form.append('name', name);
+    form.append('email', email);
+    form.append('photo', photo);
+    updateSettings(form, 'data');
   });
 }
 
@@ -56,5 +61,13 @@ if (updatePassForm) {
     document.getElementById('password-current').value = '';
     document.getElementById('password').value = '';
     document.getElementById('password-confirm').value = '';
+  });
+}
+
+if (bookButton) {
+  bookButton.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
   });
 }
