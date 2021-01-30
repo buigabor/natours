@@ -1,0 +1,312 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  link(href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet')
+  // <link rel="stylesheet" href="icon-fonts.css">
+  link(rel='stylesheet' href='/css/home-styles.css')
+  link(rel='shortcut icon' type='image/png' href='/img/home/favicon.png')
+  title Natours | Exciting tours for adventurous people
+// NAVIGATION
+.navigation
+  input#navi-toggle.navigation__checkbox(type='checkbox')
+  label.navigation__button(for='navi-toggle')
+    span.navigation__icon  &nbsp;
+  .navigation__background &nbsp;
+  nav.navigation__nav
+    ul.navigation__list
+      li.navigation__item
+        a.navigation__link(href='/home') About Natours
+      li.navigation__item
+        a.navigation__link(href='/home') Your benefits
+      li.navigation__item
+        a.navigation__link(href='/home') Popular tours
+      li.navigation__item
+        a.navigation__link(href='/home') Stories
+      li.navigation__item
+        a.navigation__link(href='/home') Book now
+header.header
+  .header__logo-box
+    img.header__logo(src='/img/home/logo-white.png' alt='logo')
+  // HEADER
+  .header__text-box
+    h1.heading-primary
+      span.heading-primary--main Outdoors
+      span.heading-primary--sub is where life happens
+    a.btn.btn--white.btn--animated(href='#section-tours') Discover our tours
+main
+  .test
+    // SECTION ABOUT
+    section.section-about
+      .u-text-center.u-margin-bottom-big
+        h2.heading-secondary
+          | Exciting tours for adventurous people
+      // HEADER PARAGRAPHS
+      .row
+        .col-1-of-2
+          h3.heading-tertiary.u-margin-bottom-small
+            | You are going to fall in love with nature
+          p.paragraph
+            | Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+            | dolorem a ea tempore sequi inventore provident, deserunt enim
+            | nulla aperiam expedita?
+          h3.heading-tertiary.u-margin-bottom-small
+            | Live adventures like you never have before
+          p.paragraph
+            | Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+            | voluptatum molestias exercitationem officia vel corporis.
+            | Inventore provident, deserunt enim nulla aperiam expedita.
+          a.btn-text(href='/home')  Learn more &rarr;
+        // HEADER IMAGE COMPOSITION
+        .col-1-of-2
+          .composition
+            img.composition__photo.composition__photo--p1(srcset='/img/home/nat-1.jpg 300w, /img/home/nat-1-large.jpg 1000w' sizes='(max-width: 56.25em) 20vw, (max-width: 37.5em) 30vw, 300px' alt='Photo 1' src='/img/home/nat-1-large.jpg')
+            img.composition__photo.composition__photo--p2(srcset='/img/home/nat-2.jpg 300w, /img/home/nat-2-large.jpg 1000w' sizes='(max-width: 56.25em) 20vw, (max-width: 37.5em) 30vw, 300px' alt='Photo 2' src='/img/home/nat-2-large.jpg')
+            img.composition__photo.composition__photo--p3(srcset='/img/home/nat-3.jpg 300w, /img/home/nat-3-large.jpg 1000w' sizes='(max-width: 56.25em) 20vw, (max-width: 37.5em) 30vw, 300px' alt='Photo 3' src='/img/home/nat-3-large.jpg')
+            //
+              <img src="img/nat-1-large.jpg" alt="Photo 1" class="composition__photo composition__photo--p1" />
+              <img src="img/nat-2-large.jpg" alt="Photo 2" class="composition__photo composition__photo--p2" />
+              <img src="img/nat-3-large.jpg" alt="Photo 3" class="composition__photo composition__photo--p3" />
+  // FEATURES SECTION
+  section.section-features
+    .row
+      // WORLD FEATURE BOX
+      .col-1-of-4
+        .feature-box
+          i.feature-box__icon.icon-basic-world
+          h3.heading-tertiary.u-margin-bottom-small
+            | Explore the World!
+          p.feature-box__text
+            | Lorem ipsum dolor, quibusdam ut veniam earum quidem blanditiis!
+            | Officia, at minima? Nulla?
+      // COMPASS FEATURE BOX
+      .col-1-of-4
+        .feature-box
+          i.feature-box__icon.icon-basic-compass
+          h3.heading-tertiary.u-margin-bottom-small
+            | Meet nature!
+          p.feature-box__text
+            | Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
+            | necessitatibus, non pariatur in quia sit omnis?
+      // MAP FEATURE BOX
+      .col-1-of-4
+        .feature-box
+          i.feature-box__icon.icon-basic-map
+          h3.heading-tertiary.u-margin-bottom-small
+            | Find your way!
+          p.feature-box__text
+            | Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
+            | necessitatibus, eos quibusdam optio iste.
+      // HEART FEATURE BOX
+      .col-1-of-4
+        .feature-box
+          i.feature-box__icon.icon-basic-heart
+          h3.heading-tertiary.u-margin-bottom-small
+            | Live a healthier life!
+          p.feature-box__text
+            | Lorem ipsum dolor, quibusdam ut veniam earum quidem blanditiis!
+            | Officia, at minima? Nulla?
+  // SECTION FEATURES
+  section#section-tours.section-tours
+    .u-text-center.u-margin-bottom-big
+      h2.heading-secondary Most popular tours
+    .row
+      // //FIRST CARD
+      .col-1-of-3
+        .card
+          .card__side.card__side--front
+            .card__picture.card__picture--1
+            h4.card__heading
+              span.card__heading-span.card__heading-span--1
+                | The Sea Explorer
+            .card__details
+              ul
+                li 3 days tour
+                li Up to 30 people
+                li 2 tour guides
+                li Sleep in cozy hotels
+                li Difficulty: easy
+          .card__side.card__side--back.card__side--back-1
+            .card__cta
+              .card__price-box
+                p.card__price-only Only
+                p.card__price-value $297
+              a.btn.btn--white(href='/tour/the-sea-explorer') Book now!
+      // //SECOND CARD
+      .col-1-of-3
+        .card
+          .card__side.card__side--front
+            .card__picture.card__picture--2
+            h4.card__heading
+              span.card__heading-span.card__heading-span--2
+                | The Forest Hiker
+            .card__details
+              ul
+                li 7 days tour
+                li Up to 40 people
+                li 6 tour guides
+                li Sleep in provided tents
+                li Difficulty: medium
+          .card__side.card__side--back.card__side--back-2
+            .card__cta
+              .card__price-box
+                p.card__price-only Only
+                p.card__price-value $397
+              a.btn.btn--white(href='/tour/the-forest-hiker') Book now!
+      // //THIRD CARD
+      .col-1-of-3
+        .card
+          .card__side.card__side--front
+            .card__picture.card__picture--3
+            h4.card__heading
+              span.card__heading-span.card__heading-span--3
+                | The Snow Adventurer
+            .card__details
+              ul
+                li 5 days tour
+                li Up to 15 people
+                li 3 tour guides
+                li Sleep in provided tents
+                li Difficulty: hard
+          .card__side.card__side--back.card__side--back-3
+            .card__cta
+              .card__price-box
+                p.card__price-only Only
+                p.card__price-value $497
+              a.btn.btn--white(href='/tour/the-snow-adventurer') Book now!
+    // DISCOVER ALL TOURS BUTTON
+    .u-text-center.u-margin-top-huge
+      a.btn.btn--green(href='/home') Discover all tours
+  // SECTION STORIES
+  section.section-stories
+    .bg-video
+      video.bg-video__content(autoplay='' muted='' loop='')
+        source(src='/img/home/video.mp4' type='video/mp4')
+        source(src='/img/home/video.webm' type='video/webm')
+        |             Your browser is not supported :(
+    .u-text-center.u-margin-bottom-big
+      h2.heading-secondary We make people genuinely happy
+    // ROW 1
+    .row
+      .story
+        figure.story__shape
+          img.story__image(src='/img/home/nat-8.jpg' alt='Person on a tour')
+          figcaption.story__caption Mary Smith
+        .story__text
+          h3.heading-tertiary(class='.u-margin-bottom-small')
+            | I had the best weekend with my family
+          p
+            | Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
+            | tempora laboriosam labore rerum blanditiis nostrum dolores amet
+            | non distinctio aut. Lorem, ipsum dolor sit amet consectetur
+            | adipisicing elit. Placeat fuga iusto consectetur, sapiente id
+            | dolorem minima fugit omnis fugiat enim incidunt. Lorem ipsum
+            | dolor sit amet consectetur adipisicing elit. Explicabo, quas?
+    // ROW 2
+    .row
+      .story
+        figure.story__shape
+          img.story__image(src='/img/home/nat-9.jpg' alt='Person on a tour')
+          figcaption.story__caption Jack Wilson
+        .story__text
+          h3.heading-tertiary(class='.u-margin-bottom-small')
+            | Wow! My life is completely different now!
+          p
+            | Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
+            | tempora laboriosam labore rerum blanditiis nostrum dolores amet
+            | non distinctio aut. Lorem, ipsum dolor sit amet consectetur
+            | adipisicing elit. Placeat fuga iusto consectetur, sapiente id
+            | dolorem minima fugit omnis fugiat enim incidunt. Lorem ipsum
+            | dolor sit amet consectetur adipisicing elit. Explicabo, quas?
+    // DISCOVER ALL TOURS BUTTON
+    .u-text-center.u-margin-top-huge
+      a.btn-text(href='#')  Read all stories &rarr;
+  // SECTION BOOKING
+  section.section-book
+    .row
+      .book
+        .book__form
+          form.form(action='/login')
+            .u-margin-bottom-medium
+              h2.heading-secondary Start booking now!
+            // FULL NAME AND EMAIL
+            .form__group
+              input#name.form__input(type='text' placeholder='Full name' required='')
+              label.form__label(for='name') Full name
+            .form__group
+              input#email.form__input(type='email' placeholder='Email address' required='')
+              label.form__label(for='email') Email address
+            // RADIO BUTTONS
+            .form__group.u-margin-bottom-medium
+              .form__radio-group
+                input#small.form__radio-input(type='radio' name='size')
+                label.form__radio-label(for='small')
+                  span.form__radio-button
+                  |                       Small tour group
+              .form__radio-group
+                input#large.form__radio-input(type='radio' name='size')
+                label.form__radio-label(for='large')
+                  span.form__radio-button
+                  |                       Large tour group
+            .form__group
+              button.btn.btn--green Next step &rarr;
+// FOOTER
+footer.footer
+  .footer__logo-box
+    // ART DIRECTION + DENSITY SWITCHING
+    picture.footer__logo
+      source(srcset='\
+      /img/home/logo-green-small-1x.png 1x,\
+      /img/home/logo-green-small-2x.png 2x\
+      ' media='(max-width: 37.5em)')
+      img.footer__logo(srcset='/img/home/logo-green-1x.png 1x, /img/home/logo-green-2x.png 2x' alt='Full logo' src='/img/home/logo-green-2x.png')
+    // Density switching
+    //
+      <img srcset="img/logo-green-1x.png 1x, img/logo-green-2x.png 2x"
+      alt="Full logo" class="footer__logo">
+  // FOOTER NAVIGATION
+  .row
+    .col-1-of-2
+      .footer__navigation
+        ul.footer__list
+          li.footer__item
+            a.footer__link(href='') Company
+          li.footer__item
+            a.footer__link(href='') Contact us
+          li.footer__item
+            a.footer__link(href='') Careers
+          li.footer__item
+            a.footer__link(href='') Privacy policy
+          li.footer__item
+            a.footer__link(href='') Terms
+    // FOOTER COPYRIGHT
+    .col-1-of-2
+      p.footer__copyright
+        | Built by #{' '}
+        a.footer__link(href='#') Gabriel Bui
+        | , following
+        |             Jonas Schmedtmann&apos;s design. Copyright &copy; by Jonas Schmedtmann.
+// POPUP
+#popup.popup
+  .popup__content
+    .popup__left
+      img.popup__img.popup__img1(src='/img/home/nat-8.jpg' alt='Tour photo')
+      img.popup__img.popup__img2(src='/img/home/nat-9.jpg' alt='Tour photo')
+    .popup__right
+      a.popup__close(href='#section-tours') &times;
+      h2.heading-secondary.u-margin-bottom-small
+        | Start booking now
+      h3.heading-tertiary.u-margin-bottom-small
+        | Important &ndash; Please read these terms before booking
+      p.popup__text
+        | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        | Praesentium sint sed ea culpa vero ducimus ab tenetur sequi, totam
+        | explicabo magni accusantium debitis enim ratione, impedit dolor
+        | accusamus doloremque! Corrupti. Lorem, ipsum dolor sit amet
+        | consectetur adipisicing elit. Odio, ad. Voluptatibus numquam et
+        | corrupti voluptate sed repellat perferendis! Deleniti praesentium
+        | distinctio sapiente culpa, voluptatibus ipsam atque nam rem velit
+        | iure.
+      a.btn.btn--green.popup__btn(href='#') Book now
+script.
+  0;
