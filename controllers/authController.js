@@ -15,7 +15,7 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user.id);
 
   const cookieOptions = {
@@ -28,7 +28,7 @@ const createSendToken = (user, statusCode, res) => {
     secure: false,
   };
 
-  if (process.env.NODE_ENV === 'production') {
+  if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
     cookieOptions.secure = true;
   }
 
@@ -54,7 +54,7 @@ const signUp = catchAsyncErrors(async (req, res, next) => {
   });
   const url = `${req.protocol}://${req.get('host')}/me`;
   await new Email(newUser, url).sendWelcome();
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 });
 
 const login = catchAsyncErrors(async (req, res, next) => {
@@ -74,7 +74,7 @@ const login = catchAsyncErrors(async (req, res, next) => {
 
   // 3. If everything ok, send token to client
 
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 const protectRoute = catchAsyncErrors(async (req, res, next) => {
@@ -189,7 +189,7 @@ const resetPassword = catchAsyncErrors(async (req, res, next) => {
 
   // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 const updatePassword = catchAsyncErrors(async (req, res, next) => {
@@ -211,7 +211,7 @@ const updatePassword = catchAsyncErrors(async (req, res, next) => {
   user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
   //4. Log user in
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 const checkIfCurrentUser = async (req, res, next) => {
