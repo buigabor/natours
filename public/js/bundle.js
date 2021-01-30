@@ -8467,7 +8467,7 @@ var login = /*#__PURE__*/function () {
             if (res.data.status === 'success') {
               (0, _alerts.showAlert)('success', 'Logged in successfully!');
               window.setTimeout(function () {
-                location.assign('/');
+                location.assign('/home');
               }, 500);
             }
 
@@ -8512,7 +8512,7 @@ var logout = /*#__PURE__*/function () {
             res = _context2.sent;
 
             if (res.data.status === 'success') {
-              location.assign('/');
+              location.assign('/home');
             }
 
             _context2.next = 10;

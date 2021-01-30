@@ -13,7 +13,7 @@ export const login = async (email, password) => {
     if (res.data.status === 'success') {
       showAlert('success', 'Logged in successfully!');
       window.setTimeout(() => {
-        location.assign('/');
+        location.assign('/home');
       }, 500);
     }
   } catch (error) {
@@ -29,7 +29,7 @@ export const logout = async () => {
     });
 
     if (res.data.status === 'success') {
-      location.assign('/');
+      location.assign('/home');
     }
   } catch (error) {
     showAlert('error', 'Error logging out! Try again');

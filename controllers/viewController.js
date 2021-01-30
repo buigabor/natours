@@ -40,6 +40,10 @@ const renderBase = (req, res) => {
     .render('base', { title: 'Exciting tours for adventorous people' });
 };
 
+const renderHome = (req, res) => {
+  res.status(200).render('home', { title: 'Home' });
+};
+
 const renderLogin = catchAsyncErrors(async (req, res, next) => {
   res
     .status(200)
@@ -88,4 +92,5 @@ module.exports = {
   renderAccount,
   updateUserData,
   renderMyTours,
+  renderHome,
 };
