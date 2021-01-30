@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon ./server.js",
+    "start": "node server.js",
     "start:prod": "NODE_ENV=production nodemon ./server.js",
     "delete-data": "node ./dev-data/data/import-dev-data.js --delete",
     "import-data": "node ./dev-data/data/import-dev-data.js --import",
@@ -51,5 +51,8 @@
     "eslint-plugin-prettier": "^3.3.0",
     "eslint-plugin-react": "^7.21.5",
     "prettier": "^2.2.1"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }
