@@ -34,12 +34,7 @@ app.use(cors());
 app.options('*', cors());
 
 // Set security HTTP headers
-app.use(
-  cors({
-    origin: 'http://127.0.0.1:3000',
-    credentials: true,
-  })
-);
+
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
