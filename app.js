@@ -104,7 +104,7 @@ csp.extend(app, {
         'unsafe-inline',
         'data:',
         'blob:',
-        'wss://natours-bui.herokuapp.com:3000>/',
+        'https://natours-bui.herokuapp.com',
         'https://*.stripe.com',
         'https://*.mapbox.com',
         'https://*.cloudflare.com/',
