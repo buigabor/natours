@@ -8,7 +8,6 @@ const {
   renderMyTours,
   renderHome,
 } = require('../controllers/viewController');
-const { createBookingCheckout } = require('../controllers/bookingController');
 const { isLoggedIn, protectRoute } = require('../controllers/authController');
 
 const router = express.Router();
