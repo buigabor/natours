@@ -14,7 +14,7 @@ const { isLoggedIn, protectRoute } = require('../controllers/authController');
 const router = express.Router();
 
 router.get('/', renderHome);
-router.get('/home', createBookingCheckout, isLoggedIn, renderOverview);
+router.get('/home', isLoggedIn, renderOverview);
 router.get('/tour/:tourSlug', isLoggedIn, renderTour);
 router.get('/login', isLoggedIn, renderLogin);
 router.get('/me', protectRoute, renderAccount);

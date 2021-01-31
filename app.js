@@ -22,6 +22,8 @@ const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingsRoutes');
 
+const { webhookCheckout } = require('./controllers/bookingController');
+
 app.enable('trust proxy');
 
 app.set('view engine', 'pug');
@@ -122,6 +124,12 @@ const limiter = rateLimiter({
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP. Please try again an hour later',
 });
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  webhookCheckout
+);
 
 // use it for every route starting with /api
 app.use('/api', limiter);
