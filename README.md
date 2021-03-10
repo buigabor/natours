@@ -38,10 +38,10 @@ https://documenter.getpostman.com/view/11740716/TVzNJKmX#4c1345e3-3da6-414b-868f
 
 ## 🖥️ Technologies Used
 
-Frontend: PUG, HTML5, SASS, JS. 
-Backend: Node.js, Express. 
-Database: MongoDB + Mongoose.  
-Miscellaneous: Stripe.js, Nodemailer
+Frontend: PUG, HTML5, SASS, JS.   
+Backend: Node.js, Express.   
+Database: MongoDB + Mongoose.   
+Miscellaneous: Stripe.js, Nodemailer.   
  
 ## Previews
 
