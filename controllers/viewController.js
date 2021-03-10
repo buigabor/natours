@@ -71,6 +71,15 @@ const updateUserData = catchAsyncErrors(async (req, res, next) => {
     .render('account', { title: 'Your account', user: updatedUser });
 });
 
+const alerts = (req, res, next) => {
+  const { alert } = req.query;
+  if (alert === 'booking') {
+    res.locals.alert =
+      "Your booking was successful! Please check your email for conformation. If your book doesn't show up immediately, please come back later.";
+  }
+  next();
+};
+
 // Only for rendered pages, no errors!
 
 const renderMyTours = catchAsyncErrors(async (req, res, next) => {
@@ -93,4 +102,5 @@ module.exports = {
   updateUserData,
   renderMyTours,
   renderHome,
+  alerts,
 };

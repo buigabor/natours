@@ -12,7 +12,7 @@ html
       //- script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" defer)
       script(src='/js/bundle.js' defer)
 
-  body
+  body(data-alert=`${ alert ? alert : ''}`)
     // HEADER
     include _header
 

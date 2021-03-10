@@ -7,10 +7,12 @@ const {
   updateUserData,
   renderMyTours,
   renderHome,
+  alerts,
 } = require('../controllers/viewController');
 const { isLoggedIn, protectRoute } = require('../controllers/authController');
 
 const router = express.Router();
+router.use(alerts);
 
 router.get('/', renderHome);
 router.get('/home', isLoggedIn, renderOverview);

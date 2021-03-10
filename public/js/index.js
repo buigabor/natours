@@ -1,5 +1,6 @@
 /* eslint-disable */
 import '@babel/polyfill';
+import { showAlert } from './alerts';
 import { login, logout } from './login';
 import { displayMap } from './mapbox';
 import { bookTour } from './stripe';
@@ -70,4 +71,9 @@ if (bookButton) {
     const { tourId } = e.target.dataset;
     bookTour(tourId);
   });
+}
+
+const alertMessage = document.querySelector('body').dataset.alert;
+if (alertMessage) {
+  showAlert('success', alertMessage, 15);
 }
