@@ -44,10 +44,10 @@ Database: MongoDB + Mongoose
 Testing: Cypress, Jest   
 Miscellaneous: Stripe.js, Nodemailer
  
-## Preview
+## Previews
 
-<img src="/public/previews/preview1.png">
-<img src="/public/previews/preview2.png">
-<img src="/public/previews/preview3.png">
-<img src="/public/previews/preview4.png">
+<img src="/public/img/previews/preview1.png">
+<img src="/public/img/previews/preview2.png">
+<img src="/public/img/previews/preview3.png">
+<img src="/public/img/previews/preview4.png">
 
